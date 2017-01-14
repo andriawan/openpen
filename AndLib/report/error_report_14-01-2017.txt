@@ -1,0 +1,130 @@
+Time : 21:14:43
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ORDER BY date_created DESC' at line 8
+Raw SQL : SELECT * 
+	FROM openpen.all_user_post 
+	where regist_id 
+	IN 
+		(SELECT user_regist_id 
+		FROM openpen.pen_friend where 
+		friend = '15');
+	ORDER BY date_created DESC
+
+Time : 19:09:42
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'IN
+		(SELECT user_regist_id 
+		FROM `openpen`.`pen_friend` 
+		WHERE friend = '10' at line 9
+Raw SQL : SELECT *
+	FROM `openpen`.`user` u INNER JOIN `openpen`.`act_writing` act
+	ON `u`.`regist_id` 
+	IN
+		(SELECT user_regist_id 
+		FROM `openpen`.`pen_friend` 
+		WHERE friend = '10' AND confirm = '1') 
+	AND 
+	IN
+		(SELECT user_regist_id 
+		FROM `openpen`.`pen_friend` 
+		WHERE friend = '10' AND confirm = '1')
+
+Time : 19:05:09
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'act_writing.friend' in 'on clause'
+Raw SQL : SELECT *
+	FROM `openpen`.`user` INNER JOIN `openpen`.`act_writing`
+	ON `user`.`regist_id` = '10' AND `act_writing`.`friend` = '10'
+
+Time : 19:04:01
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'act.friend' in 'on clause'
+Raw SQL : SELECT *
+	FROM `openpen`.`user` u INNER JOIN `openpen`.`act_writing` act
+	ON `u`.`regist_id` = '10' AND `act`.`friend` = '10'
+
+Time : 10:11:24
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'regist_id' in 'where clause'
+Raw SQL : SELECT * 
+	FROM `openpen`.`genre` 
+	WHERE regist_id = ''
+
+Time : 08:37:50
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'confirm' in 'where clause'
+Raw SQL : SELECT * FROM `openpen`.`user` where `user`.`regist_id` IN (SELECT user_regist_id from `openpen`.`pen_friend` where friend = '10') AND confirm = '0'
+
+Time : 07:45:21
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_pen_friend_1` FOREIGN KEY (`friend`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('10', '', '1')
+
+Time : 07:42:54
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_pen_friend_1` FOREIGN KEY (`friend`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('10', '', '1')
+
+Time : 07:36:44
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_pen_friend_1` FOREIGN KEY (`friend`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('10', '', '1')
+
+Time : 07:34:08
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_pen_friend_1` FOREIGN KEY (`friend`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('10', '', '1')
+
+Time : 07:30:56
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_pen_friend_1` FOREIGN KEY (`friend`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('10', '', '1')
+
+Time : 07:29:30
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_pen_friend_1` FOREIGN KEY (`friend`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('10', '', '1')
+
+Time : 07:28:48
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_pen_friend_1` FOREIGN KEY (`friend`) REFERENCES `user` (`regist_id`) ON DELETE NO ACTION ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('10', '', '1')
+
+Time : 07:20:22
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_pen_friend_1` FOREIGN KEY (`friend`) REFERENCES `user` (`regist_id`) ON DELETE NO ACTION ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('10', '', '1')
+
+Time : 07:19:00
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_pen_friend_1` FOREIGN KEY (`friend`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('10', '', '1')
+
+Time : 07:17:46
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_pen_friend_1` FOREIGN KEY (`friend`) REFERENCES `user` (`regist_id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('10', '', '1')
+
+Time : 06:41:18
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'friend' in 'having clause'
+Raw SQL : SELECT COUNT(*) as counter FROM `openpen`.`pen_friend` WHERE user_regist_id = '10' group by user_regist_id having friend ='15'
+
+Time : 06:41:03
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'pen_friend.friend' in 'having clause'
+Raw SQL : SELECT COUNT(*) as counter FROM `openpen`.`pen_friend` WHERE user_regist_id = '10' group by user_regist_id having `pen_friend`.`friend`='15'
+
+Time : 06:41:01
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'pen_friend.friend' in 'having clause'
+Raw SQL : SELECT COUNT(*) as counter FROM `openpen`.`pen_friend` WHERE user_regist_id = '10' group by user_regist_id having `pen_friend`.`friend`='15'
+
+Time : 06:36:43
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'pen_friend.friend' in 'having clause'
+Raw SQL : SELECT COUNT(*) as counter FROM `openpen`.`pen_friend` WHERE user_regist_id = '10' having `pen_friend`.`friend`='15'
+
+Time : 06:35:56
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'friend' in 'having clause'
+Raw SQL : SELECT COUNT(*) as counter FROM `openpen`.`pen_friend` WHERE user_regist_id = '10' having friend='15'
+
+Time : 06:31:17
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'friend' in 'having clause'
+Raw SQL : SELECT COUNT(*) as counter FROM `openpen`.`pen_friend` WHERE user_regist_id = '10' HAVING friend='15'
+
+Time : 06:30:56
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_regist_id' in 'having clause'
+Raw SQL : SELECT COUNT(*) as counter FROM `openpen`.`pen_friend` HAVING user_regist_id = '10' and friend='15'
+
+Time : 06:20:36
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'openpen.regist_id' in 'IN/ALL/ANY subquery'
+Raw SQL : SELECT * FROM `openpen`.`user` where `openpen`.`regist_id` IN (SELECT user_regist_id from `openpen`.`pen_friend` where friend = '10')
+
+Time : 06:20:17
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'pen_friend.regist_id' in 'IN/ALL/ANY subquery'
+Raw SQL : SELECT * FROM `openpen`.`user` where `pen_friend`.`regist_id` IN (SELECT user_regist_id from `openpen`.`pen_friend` where friend = '10')
+
+Time: 06:20:00
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+Raw SQL : SELECT * FROM `openpen`.`user` where `pen_friend`.`regist_id` IN (SELECT user_regist_id from `openpen`.`pen_friend` where friend = '10'

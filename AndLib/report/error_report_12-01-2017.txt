@@ -1,0 +1,18 @@
+Time : 22:13:16
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+Raw SQL : SELECT * from `openpen`.`user` WHERE regist_id =
+
+Time : 18:57:24
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''andriawanirwan@yahoo.com' at line 1
+Raw SQL : SELECT pen_name, email, password FROM `openpen`.`user` where pen_name = 'andriawanirwan@yahoo.com' or email = 'andriawanirwan@yahoo.com
+
+Time : 10:18:57
+SQLSTATE[HY093]: Invalid parameter number: parameter was not defined
+Raw SQL : INSERT INTO `openpen`.`user` (`pen_name`, `firstname`, `lastname`, `age`, `sex`, `email`, `phone_number`, `password`, `gen_time`,`date_birth`) VALUES('andriawanax' , :firstName, 'Irwan', '18', 'Male', 'andriawan2014gmail.com', '087857854930', '$2y$09$xglmgroDekglJHOnhYg1Qun0nKW2stQfGPuRM6Vrjd.tawsLIWF8i', '1484191137', '787078800')
+
+Time : 10:15:51
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1-andriawanad' for key 'PRIMARY'
+Raw SQL : INSERT INTO `openpen`.`user` (`regist_id`, `pen_name`, `firstname`, `lastname`, `age`, `sex`, `email`, `phone_number`, `password`, `gen_time`,`date_birth`) VALUES('1', 'andriawanad' , 'Andriawan', 'Irwan', '18', 'Male', 'andriawan2014gmail.com', '087857854930', '$2y$09$Bi3r3jh/Eci13kAomOlWGO8t0SX5lz/PliSYDd8QxvarfGtn1BkyC', '1484190951', '787078800')
+
+Time: 07:59:49
+SQLSTATE[28000] [1045] Access denied for user 'www-data'@'localhost' (using password: NO)

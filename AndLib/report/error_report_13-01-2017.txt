@@ -1,0 +1,159 @@
+Time : 23:06:39
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+Raw SQL : SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` =
+
+Time : 23:01:12
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'pen_friend`.`friend` = 10' at line 1
+Raw SQL : SELECT * FROM `openpen`.`user`, `openpen`.`pen_friend` where `pen_friend`.`user_regist_id = 10 and `pen_friend`.`friend` = 10
+
+Time : 23:00:41
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'pen_friend.regist_id' in 'where clause'
+Raw SQL : SELECT * FROM `openpen`.`user`, `openpen`.`pen_friend` where `pen_friend`.regist_id = 10 and `pen_friend`.`friend` = 10
+
+Time : 22:49:53
+SQLSTATE[21000]: Cardinality violation: 1242 Subquery returns more than 1 row
+Raw SQL : SELECT * FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELECT DISTINCT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10') and `pen_friend`.`user_regist_id` = (SELECT DISTINCT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10')
+
+Time : 22:49:46
+SQLSTATE[21000]: Cardinality violation: 1242 Subquery returns more than 1 row
+Raw SQL : SELECT * FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELECT DISTINCT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10') and `pen_friend`.`user_regist_id` = (SELECT DISTINCT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10')
+
+Time : 22:49:26
+SQLSTATE[21000]: Cardinality violation: 1242 Subquery returns more than 1 row
+Raw SQL : SELECT * FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELECT DISTINCT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10') and `pen_friend`.`user_regist_id` = (SELECT DISTINCT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10')
+
+Time : 22:48:30
+SQLSTATE[21000]: Cardinality violation: 1242 Subquery returns more than 1 row
+Raw SQL : SELECT * FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10') and `pen_friend`.`user_regist_id` = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10')
+
+Time : 22:43:02
+SQLSTATE[21000]: Cardinality violation: 1242 Subquery returns more than 1 row
+Raw SQL : SELECT * FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10') and `pen_friend`.`user_regist_id` = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10')
+
+Time : 22:10:48
+SQLSTATE[21000]: Cardinality violation: 1242 Subquery returns more than 1 row
+Raw SQL : SELECT * FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10') and `pen_friend`.`user_regist_id` = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10')
+
+Time : 22:10:09
+SQLSTATE[21000]: Cardinality violation: 1242 Subquery returns more than 1 row
+Raw SQL : SELECT * FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10') and `pen_friend`.`user_regist_id` = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10')
+
+Time : 21:53:14
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*) FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELEC' at line 1
+Raw SQL : SELECT DISTINCT (*) FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '15') and `pen_friend`.`user_regist_id` = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '15')
+
+Time : 21:50:52
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DISTINCT *) FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id' at line 1
+Raw SQL : SELECT (DISTINCT *) FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '15') and `pen_friend`.`user_regist_id` = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '15')
+
+Time : 21:46:55
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELECT u' at line 1
+Raw SQL : SELECT DISTINCT FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '15') and `pen_friend`.`user_regist_id` = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '15')
+
+Time : 21:30:25
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = ' at line 1
+Raw SQL : SELECT * FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = '10' and `pen_friend`.`user_regist_id` = SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10'
+
+Time : 21:29:36
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+Raw SQL : SELECT * FROM `openpen`.`user`, `openpen`.`pen_friend` where `user`.regist_id = '10' and `pen_friend`.`user_regist_id` = (SELECT user_regist_id FROM `openpen`.`pen_friend` where `pen_friend`.`friend` = '10'
+
+Time : 21:14:00
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.`user` where `pen_friend`.`friend` = '10' and `user`.`regist_id` = '10'' at line 1
+Raw SQL : SELECT * FROM `openpen`.`pen_friend` `openpen`.`user` where `pen_friend`.`friend` = '10' and `user`.`regist_id` = '10'
+
+Time : 21:12:19
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.`user` where user_regist_id = '10' and regist_id = '10'' at line 1
+Raw SQL : SELECT * FROM `openpen`.`pen_friend` `openpen`.`user` where user_regist_id = '10' and regist_id = '10';
+
+Time : 21:11:12
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.`user` where friend = '10' and regist_id = '10'' at line 1
+Raw SQL : SELECT * FROM `openpen`.`pen_friend` `openpen`.`user` where friend = '10' and regist_id = '10';
+
+Time : 19:42:50
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY'
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('10', '15', '0')
+
+Time : 19:40:01
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_regist_id` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('Array', '15', '0')
+
+Time : 19:38:57
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_regist_id` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('Array', '15', '0')
+
+Time : 19:37:55
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`pen_friend`, CONSTRAINT `fk_regist_id` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+Raw SQL : INSERT INTO `openpen`.`pen_friend` (`user_regist_id`, `friend`, `confirm`) VALUES ('Array', '15', '0')
+
+Time : 18:53:49
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'xvxv', 'xvxvx', '2017-01-13 18:53:49', '1', 'Introduction', '1')
+
+Time : 18:52:43
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'xvxv', 'xvxvx', '2017-01-13 18:52:43', '1', 'Introduction', '1')
+
+Time : 18:47:54
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'cek', 'fillah', '2017-01-13 18:47:54', '1', 'Introduction', '1')
+
+Time : 18:47:08
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'cek', 'fillah', '2017-01-13 18:47:08', '1', 'Introduction', '1')
+
+Time : 16:01:22
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', '', '', '2017-01-13 16:01:22', '', '', '1')
+
+Time : 15:58:44
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', '', '', '2017-01-13 15:58:44', '', '', '1')
+
+Time : 15:58:13
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', '', '', '2017-01-13 15:58:13', '', '', '1')
+
+Time : 15:52:52
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_activity_id` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('9', 'zxvszvz', 'zfzfz zfzfzfz', '2017-01-13 15:52:52', '1', 'Introduction', '9')
+
+Time : 15:45:11
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'sfsg', 'arafafra sfsfaf', '2017-01-13 15:45:11', '1', 'Introduction', '1')
+
+Time : 15:42:51
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'hello down', 'adadajh akdja aakjad adkahdk', '2017-01-13 15:42:51', '1', 'chapter2', '1')
+
+Time : 13:14:10
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE CASCADE ON UPDATE CASCADE)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'vsfsv', 'sfsvsvsv sfsfsfsg', '2017-01-13 13:14:10', '1', 'Introduction', '1')
+
+Time : 13:13:19
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'vsfsv', 'sfsvsvsv sfsfsfsg', '2017-01-13 13:13:19', '1', 'Introduction', '1')
+
+Time : 13:10:03
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'szfsfs', 'zfsfsfsgsg sgssg sgsgs', '2017-01-13 13:10:03', '1', 'Introduction', '1')
+
+Time : 13:09:46
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'szfsfs', 'zfsfsfsgsg sgssg sgsgs', '2017-01-13 13:09:46', '1', 'Introduction', '1')
+
+Time : 13:09:15
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'szfsfs', 'zfsfsfsgsg sgssg sgsgs', '2017-01-13 13:09:15', '1', 'Introduction', '1')
+
+Time : 13:07:00
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'sfsfsadada', 'zxfsfgsfzczc', '2017-01-13 13:07:00', '1', 'Introduction', '1')
+
+Time : 13:06:29
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_writing_user1` FOREIGN KEY (`user_regist_id`) REFERENCES `user` (`regist_id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', 'sfsfs', 'zxfsfgsf', '2017-01-13 13:06:29', '1', 'Introduction', '1')
+
+Time: 12:50:49
+SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`openpen`.`act_writing`, CONSTRAINT `fk_activity_id` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+Raw SQL : INSERT INTO `openpen`.`act_writing` (`user_regist_id`, `title`, `content`, `date_created`, `marathon_status`, `toc_status`, `activity_id`) VALUES ('', '', '', '2017-01-13 12:50:49', '', '', '')
