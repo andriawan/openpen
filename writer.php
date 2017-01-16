@@ -42,6 +42,13 @@ $friendList = $con->queryObj("
 		WHERE friend = '$owner' AND confirm = '1')
 	");
 
+$messagesNotif = $con->queryObj("
+	SELECT COUNT(*)
+	AS counter
+	FROM `openpen`.`messages`
+	WHERE `messages`.`reciever_id` = '$owner' AND `messages`.`is_read` = '0'
+	");
+
 $con->closeConnection();
 // ---------------- handle database ------------------
 
@@ -51,6 +58,10 @@ $friendNotif = intval($friendNotif->friend);
 
 $friendCount = $friendCount[0];
 $friendCount = intval($friendCount->lfriend);
+
+//retrieve numbers of messages notif
+$messagesNotif = $messagesNotif[0]->counter;
+$messagesNotif = intval($messagesNotif);
 
 // AndDevDebug::printNice($friendList);
 
@@ -68,7 +79,15 @@ $friendCount = intval($friendCount->lfriend);
 			<ul>
 				<li><a href="home.php">Home</a></li>
 				<li><a href="profile.php?regist_id=<?php echo $owner; ?>">Profile</a></li>
-				<li><a href="message.php">Messages</a></li>
+				<?php 
+					if ($isLogin) {
+						if ($messagesNotif == 0) {
+							echo "<li><a href='messages.php'>Messages</a></li>";
+						} else{
+							echo "<li><a href='messages.php'>Messages (" . $messagesNotif . ") </a></li>";
+						}
+					} 
+				?>
 				<li><a href="notifications.php">Notifications</a></li>
 				<?php 
 					if ($isLogin) {

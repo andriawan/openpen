@@ -50,6 +50,16 @@ $isYourFriend = $con->queryObj("
 	WHERE user_regist_id = '$regist_id' AND friend ='$owner'
 	");
 
+$messagesNotif = $con->queryObj("
+	SELECT COUNT(*)
+	AS counter
+	FROM `openpen`.`messages`
+	WHERE `messages`.`reciever_id` = '$owner' AND `messages`.`is_read` = '0'
+	");
+
+$con->closeConnection();
+// ---------------- handle database ------------------
+
 $writer = $writer[0];
 //for form
 $val = $result[0]->regist_id;
@@ -57,16 +67,16 @@ $val = $result[0]->regist_id;
 $friend = $friend[0];
 $friendNotif = $friendNotif[0];
 $isYourFriend = $isYourFriend[0];
+//retrieve numbers of messages notif
+$messagesNotif = $messagesNotif[0]->counter;
+$messagesNotif = intval($messagesNotif);
 
 $isSent = intval($friend->counter);
 $writer = intval($writer->counter);
 $friendNotif = intval($friendNotif->friend);
 $isYourFriend = intval($isYourFriend->user);
 
-$con->closeConnection();
-// ---------------- handle database ------------------
-
-// AndDevDebug::printNice($isYourFriend == $regist_id);
+// AndDevDebug::printNice($result);
 
 ?>
 
@@ -83,7 +93,15 @@ $con->closeConnection();
 		<ul>
 			<li><a href="home.php">Home</a></li>
 			<li><a href="profile.php?regist_id=<?php echo $owner; ?>">Profile</a></li>
-			<li><a href="message.php">Messages</a></li>
+			<?php 
+				if ($isLogin) {
+					if ($messagesNotif == 0) {
+						echo "<li><a href='messages.php'>Messages</a></li>";
+					} else{
+						echo "<li><a href='messages.php'>Messages (" . $messagesNotif . ") </a></li>";
+					}
+				} 
+			?>
 			<li><a href="notifications.php">Notifications</a></li>
 			<?php if ($isLogin) {
 				if ($friendNotif == 0) {
@@ -185,6 +203,11 @@ $con->closeConnection();
 			$dateRaw = AndTimeUtils::setDateToTimestamp($value->date_created);
 			$agoStyle = AndTimeUtils::getTimeAgoStyle($dateRaw);
 			echo "<p>". $agoStyle . "</p>";
+			if ($owner == $regist_id ) {
+				echo "<a href='single.php?ref=" . $value->writing_id . "'>Edit</a>";
+			} elseif($value->marathon_status == 1){
+				echo "<a href='proposal.php?ref=" . $value->writing_id . "'>Propose Marathon Writing</a>";
+			}
 		}
 
 	?>

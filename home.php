@@ -9,6 +9,10 @@ if (isset($_SESSION['user_id'])) {
 }
 
 $id = AndSecurityGuard::defendInput($_SESSION['user_id']);
+$owner = $_SESSION['user_id'];
+
+$cek = $_SESSION;
+$globe = $GLOBALS;
 
 // ---------------- handle database ------------------
 
@@ -37,6 +41,20 @@ $feed = $con->queryObj("
 	ORDER BY date_created DESC
 	");
 
+$messagesNotif = $con->queryObj("
+	SELECT COUNT(*)
+	AS counter
+	FROM `openpen`.`messages`
+	WHERE `messages`.`reciever_id` = '$owner' AND `messages`.`is_read` = '0'
+	");
+
+$notifCount = $con->queryObj("
+	SELECT COUNT(reciever) 
+	AS counter 
+	FROM `openpen`.`notifications_list` 
+	WHERE reciever = '$owner' AND notif_status = '0'
+	");
+
 $con->closeConnection();
 // ---------------- handle database ------------------
 
@@ -46,7 +64,13 @@ $result = $result[0];
 $friendNotif = $friendNotif[0];
 $friendNotif = intval($friendNotif->friend);
 
-// AndDevDebug::printNice($isLogin);
+$notifCount = $notifCount[0];
+$notifCount = intval($notifCount->counter);
+
+//retrieve numbers of messages notif
+$messagesNotif = $messagesNotif[0]->counter;
+$messagesNotif = intval($messagesNotif);
+AndDevDebug::printNice($notifCount);
 
 ?>
 
@@ -62,8 +86,24 @@ $friendNotif = intval($friendNotif->friend);
 			<ul>
 				<li><a href="home.php">Home</a></li>
 				<li><a href="profile.php?regist_id=<?php echo $result->regist_id; ?>">Profile</a></li>
-				<li><a href="message.php">Messages</a></li>
-				<li><a href="notifications.php">Notifications</a></li>
+				<?php 
+					if ($isLogin) {
+						if ($messagesNotif == 0) {
+							echo "<li><a href='messages.php'>Messages</a></li>";
+						} else{
+							echo "<li><a href='messages.php'>Messages (" . $messagesNotif . ") </a></li>";
+						}
+					} 
+				?>
+				<?php 
+					if ($isLogin) {
+						if ($notifCount == 0) {
+							echo "<li><a href='notifications.php'>Notifications</a></li>";
+						} else{
+							echo "<li><a href='notifications.php'>Notifications (" . $notifCount . ") </a></li>";
+						}
+					} 
+				?>
 				<?php 
 					if ($isLogin) {
 						if ($friendNotif == 0) {
@@ -77,11 +117,10 @@ $friendNotif = intval($friendNotif->friend);
 				<li><a href="logout.php">Logout</a></li>
 			</ul>
 		</nav>
-		<h1><?php echo "welcome " . $result->pen_name; ?></h1>
+		<h1><?php echo "welcome " . $result->firstname . " " . $result->lastname . " (@" . $result->pen_name . ")" ; ?></h1>
 		<?php
 
 		foreach($feed as $value){
-			// var_dump($value['title']);
 			// AndDevDebug::printNice($value);
 			echo "<h1>". $value->pen_name. "</h1>";
 			echo "<h2>". $value->title. "</h2>";
@@ -89,6 +128,9 @@ $friendNotif = intval($friendNotif->friend);
 			$dateRaw = AndTimeUtils::setDateToTimestamp($value->date_created);
 			$agoStyle = AndTimeUtils::getTimeAgoStyle($dateRaw);
 			echo "<p>". $agoStyle . "</p>";
+			if(intval($value->marathon_status) == 1){
+				echo "<a href='proposal.php?ref=" . $value->writing_id . "'>Propose Marathon Writing</a>";
+			}
 		}
 
 	?>
