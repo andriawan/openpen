@@ -4,6 +4,9 @@ if (isset($_SESSION['user_id'])) {
 	header('Location:' . AndPath::getHost() . AndPath::getPath() . '/home.php');
 }
 
+$cek = $_ENV;
+AndDevDebug::printNice($cek);
+
 // AndDevDebug::printNice($$_SESSION['user_id']);
 
 // ---------------- handle database ------------------
