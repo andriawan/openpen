@@ -8,6 +8,11 @@ if (empty($_SESSION['user_id'])) {
 	$isLogin = true;
 }
 
+// jika kamu pertama kali login, kamu akan di direct untuk menyelesaikan landing page
+if ($_SESSION['firstTime'] == 1) {
+	header('Location:' . AndPath::getHost() . AndPath::getPath() . '/landing.php');
+}
+
 $owner = AndSecurityGuard::defendInput($_SESSION['user_id']);
 
 $ref = $_GET['ref'];
@@ -17,14 +22,7 @@ $con = new AndDatabase();
 
 $hasRead = $con->queryObj("
 	UPDATE `openpen`.`messages` 
-	SET `is_read`='1' WHERE `messages`.`sender_id` ='$ref' AND `messages`.`reciever_id` = '$owner' ;
-	");
-
-$messagesNotif = $con->queryObj("
-	SELECT COUNT(*)
-	AS counter
-	FROM `openpen`.`messages`
-	WHERE `messages`.`reciever_id` = '$owner' AND `messages`.`is_read` = '0'
+	SET `is_read`='1', `counter_unread`='0' WHERE `messages`.`sender_id` ='$ref' AND `messages`.`reciever_id` = '$owner' ;
 	");
 
 $conversationList = $con->queryObj("
@@ -34,12 +32,11 @@ $conversationList = $con->queryObj("
 	ORDER BY `messages_list`.`date_created` ASC
 	");
 
+require_once 'templates/counter.php';
+
 $con->closeConnection();
 
 // ---------------- handle database ------------------
-
-$messagesNotif = $messagesNotif[0]->counter;
-$messagesNotif = intval($messagesNotif);
 
 ?>
 
@@ -51,33 +48,10 @@ $messagesNotif = intval($messagesNotif);
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
-		<nav>
-			<ul>
-			<li><a href="home.php">Home</a></li>
-			<li><a href="profile.php?regist_id=<?php echo $owner; ?>">Profile</a></li>
-			<?php 
-				if ($isLogin) {
-					if ($messagesNotif == 0) {
-						echo "<li><a href='messages.php'>Messages</a></li>";
-					} else{
-						echo "<li><a href='messages.php'>Messages (" . $messagesNotif . ") </a></li>";
-					}
-				} 
-			?>
-			<li><a href="notifications.php">Notifications</a></li>
-			<?php 
-				if ($isLogin) {
-					if ($friendNotif == 0) {
-						echo "<li><a href='writer.php'>Writer</a></li>";
-					} else{
-						echo "<li><a href='writer.php'>Writer (" . $friendNotif . ") </a></li>";
-					}
-				} 
-			?>
-			<li><a href="writerSearch.php">Search your partner</a></li>
-			<li><a href="logout.php">Logout</a></li>
-		</ul>
-		</nav>
+		
+		<!-- navigation section -->
+		<?php require_once 'templates/nav-header.php'; ?>
+		<!-- navigation section -->	
 
 		<?php 
 			foreach ($conversationList as $value) {
