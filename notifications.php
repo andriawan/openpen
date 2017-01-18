@@ -8,30 +8,29 @@ if (empty($_SESSION['user_id'])) {
 	$isLogin = true;
 }
 
-$form = $_GET;
-$friendNotif = $form['friendNotif'];
+// jika kamu pertama kali login, kamu akan di direct untuk menyelesaikan landing page
+if ($_SESSION['firstTime'] == 1) {
+	header('Location:' . AndPath::getHost() . AndPath::getPath() . '/landing.php');
+}
+
 $owner = $_SESSION['user_id'];
 
 // ---------------- handle database ------------------
 $con = new AndDatabase();
 
-$notifCount = $con->queryObj("
-	SELECT COUNT(reciever) 
-	AS counter 
-	FROM `openpen`.`notifications_list` 
-	WHERE reciever = '$owner' AND notif_status = '0'
-	");
-
 $notif = $con->queryObj("
 	SELECT *
 	FROM `openpen`.`notifications_list`
-	WHERE reciever = '$owner' AND notif_status = '0'
+	WHERE reciever = '$owner'
+	ORDER BY `notifications_list`.`notif_created` DESC
 	");
+
+require_once 'templates/counter.php';
 
 $con->closeConnection();
 // ---------------- handle database ------------------
 
-AndDevDebug::printNice($notif);
+// AndDevDebug::printNice($notif);
 
 ?>
 
@@ -43,18 +42,42 @@ AndDevDebug::printNice($notif);
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
+		
+		<!-- navigation section -->
+		<?php require_once 'templates/nav-header.php'; ?>
+		<!-- navigation section -->	
+
+		<h1>Notifications</h1>
+
 		<?php foreach ($notif as $value): ?>
-			<p><?php echo $value->firstname . " " . $value->lastname; 
-				if (intval($value->activity) == 1) {
-					echo " writes messages";
-				}elseif (intval($value->activity) == 2) {
-					echo " proposes story in ";
-				}elseif (intval($value->activity) == 3) {
-					echo " interested in your story";
-				}
+			
+			<?php if (intval($value->sender) == intval($owner)): ?>
+				<?php echo null ?>
+			<?php else: ?>
+				<p><?php
+					if (intval($value->notif_status == 0)) {
+						echo "(unread) ";
+					}
+					echo $value->firstname . " " . $value->lastname; 
+					if (intval($value->activity) == 1) {
+						echo " wrote messages";
+					}elseif (intval($value->activity) == 2) {
+						echo " proposed story in ";
+					}elseif (intval($value->activity) == 3) {
+						echo " is interested in your story";
+					}
 				?>
-				<a href="proposal.php?ref=<?php echo $value->object_id; ?>">your Story</a>				
+				<a href="proposal.php?ref=<?php echo $value->object_id; ?>">your Story</a>
+				<b> <?php 
+						$dateRaw = AndTimeUtils::setDateToTimestamp($value->notif_created);
+						$agoStyle = AndTimeUtils::getTimeAgoStyle($dateRaw);
+						echo $agoStyle;
+
+					?>					
+				</b>				
 			</p>
+
+			<?php endif ?>
 
 		<?php endforeach ?>
 

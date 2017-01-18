@@ -2,7 +2,8 @@
 require_once 'AndLib/AndCore.php';
 session_start();
 if (empty($_SESSION['user_id'])) {
-	header('Location:' . AndPath::getHost() . AndPath::getPath() . '/index.php');
+	$_SESSION['must_login'] = "Anda harus memiliki akun untuk memakai fitur ini. Silahkan <a href=index.php>Register</a>";
+	header('Location:' . AndPath::getHost() . AndPath::getPath() . '/profile.php');
 }
 
 $reference = $_GET['reference'];

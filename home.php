@@ -18,17 +18,12 @@ $globe = $GLOBALS;
 
 $con = new AndDatabase();
 
+require_once 'templates/counter.php';
+
 $result = $con->queryObj("
 	SELECT * 
 	FROM `openpen`.`user` 
 	WHERE regist_id = '$id'");
-
-$friendNotif =  $con->queryObj("
-	SELECT COUNT(friend) 
-	AS friend 
-	FROM `openpen`.`pen_friend` 
-	WHERE friend = '$id'
-	AND confirm = '0' ");
 
 $feed = $con->queryObj("
 	SELECT * 
@@ -41,36 +36,17 @@ $feed = $con->queryObj("
 	ORDER BY date_created DESC
 	");
 
-$messagesNotif = $con->queryObj("
-	SELECT COUNT(*)
-	AS counter
-	FROM `openpen`.`messages`
-	WHERE `messages`.`reciever_id` = '$owner' AND `messages`.`is_read` = '0'
-	");
-
-$notifCount = $con->queryObj("
-	SELECT COUNT(reciever) 
-	AS counter 
-	FROM `openpen`.`notifications_list` 
-	WHERE reciever = '$owner' AND notif_status = '0'
-	");
 
 $con->closeConnection();
 // ---------------- handle database ------------------
 
-// AndDevDebug::printNice($feed);
-
 $result = $result[0];
-$friendNotif = $friendNotif[0];
-$friendNotif = intval($friendNotif->friend);
 
-$notifCount = $notifCount[0];
-$notifCount = intval($notifCount->counter);
+if ($result->isFirstTimeLogin == 1) {
+	header('Location:' . AndPath::getHost() . AndPath::getPath() . '/landing.php');
+}
 
-//retrieve numbers of messages notif
-$messagesNotif = $messagesNotif[0]->counter;
-$messagesNotif = intval($messagesNotif);
-AndDevDebug::printNice($notifCount);
+// AndDevDebug::printNice($GLOBALS);
 
 ?>
 
@@ -82,57 +58,27 @@ AndDevDebug::printNice($notifCount);
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
-		<nav>
-			<ul>
-				<li><a href="home.php">Home</a></li>
-				<li><a href="profile.php?regist_id=<?php echo $result->regist_id; ?>">Profile</a></li>
-				<?php 
-					if ($isLogin) {
-						if ($messagesNotif == 0) {
-							echo "<li><a href='messages.php'>Messages</a></li>";
-						} else{
-							echo "<li><a href='messages.php'>Messages (" . $messagesNotif . ") </a></li>";
-						}
-					} 
-				?>
-				<?php 
-					if ($isLogin) {
-						if ($notifCount == 0) {
-							echo "<li><a href='notifications.php'>Notifications</a></li>";
-						} else{
-							echo "<li><a href='notifications.php'>Notifications (" . $notifCount . ") </a></li>";
-						}
-					} 
-				?>
-				<?php 
-					if ($isLogin) {
-						if ($friendNotif == 0) {
-							echo "<li><a href='writer.php'>Writer</a></li>";
-						} else{
-							echo "<li><a href='writer.php'>Writer (" . $friendNotif . ") </a></li>";
-						}
-					} 
-				?>
-				<li><a href="writerSearch.php">Search your partner</a></li>
-				<li><a href="logout.php">Logout</a></li>
-			</ul>
-		</nav>
-		<h1><?php echo "welcome " . $result->firstname . " " . $result->lastname . " (@" . $result->pen_name . ")" ; ?></h1>
-		<?php
+	
 
-		foreach($feed as $value){
-			// AndDevDebug::printNice($value);
-			echo "<h1>". $value->pen_name. "</h1>";
-			echo "<h2>". $value->title. "</h2>";
-			echo "<p>". $value->content. "</p>";
-			$dateRaw = AndTimeUtils::setDateToTimestamp($value->date_created);
-			$agoStyle = AndTimeUtils::getTimeAgoStyle($dateRaw);
-			echo "<p>". $agoStyle . "</p>";
-			if(intval($value->marathon_status) == 1){
-				echo "<a href='proposal.php?ref=" . $value->writing_id . "'>Propose Marathon Writing</a>";
-			}
-		}
+		<!-- navigation section -->
+		<?php require_once 'templates/nav-header.php'; ?>
+		<!-- navigation section -->
 
-	?>
+		<h1><?php echo "Welcome " . $result->firstname . " " . $result->lastname . " (@" . $result->pen_name . ")" ; ?></h1>
+
+		<?php foreach ($feed as $value): ?>
+			
+			<h1><?php echo $value->pen_name; ?></h1>
+			<h2><?php echo $value->title; ?></h2>
+			<p><?php echo $value->content; ?></p>
+			<?php  
+				$dateRaw = AndTimeUtils::setDateToTimestamp($value->date_created);
+				$agoStyle = AndTimeUtils::getTimeAgoStyle($dateRaw);
+				echo "<p>". $agoStyle . "</p>";
+				if(intval($value->marathon_status) == 1){
+					echo "<a href='proposal.php?ref=" . $value->writing_id . "'>Propose Marathon Writing</a>";
+				}
+			?>
+		<?php endforeach ?>
 	</body>
 </html>

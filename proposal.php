@@ -3,7 +3,7 @@ require_once 'AndLib/AndCore.php';
 session_start();
 if (empty($_SESSION['user_id'])) {
 	$isLogin = false;
-	// header('Location:' . AndPath::getHost() . AndPath::getPath() . '/index.php');
+	header('Location:' . AndPath::getHost() . AndPath::getPath() . '/index.php');
 } else{
 	$isLogin = true;
 }
@@ -26,11 +26,23 @@ $allProposal = $con->queryObj("
 	WHERE `proposal_list`.`writing_id` = '$ref' AND `proposal_list`.`prop_status` = '0'
 	");
 
+$updateStatus = $con->queryObj("
+	UPDATE `openpen`.`notifications` 
+	SET `notif_status`='1' WHERE `object_id`='$ref' AND `reciever`='$owner'
+	");
+
+require_once 'templates/counter.php';
+
 $con->closeConnection();
 // ---------------- handle database ------------------
 $single = $single[0];
 
-AndDevDebug::printNice($allProposal);
+if (intval($single) == 0) {
+	$_SESSION['error_post_not_found'] = "postingan cerita tidak dapat ditemukan atau telah dihapus";
+	header('Location:' . AndPath::getHost() . AndPath::getPath() . '/error.php');
+}
+
+// AndDevDebug::printNice($allProposal);
 
 ?>
 <!DOCTYPE html>
@@ -42,31 +54,10 @@ AndDevDebug::printNice($allProposal);
 	<link rel="stylesheet" href="">
 </head>
 <body>
-	<nav>
-		<ul>
-			<li><a href="home.php">Home</a></li>
-			<li><a href="profile.php?regist_id=<?php echo $owner; ?>">Profile</a></li>
-			<?php 
-				if ($isLogin) {
-					if ($messagesNotif == 0) {
-						echo "<li><a href='messages.php'>Messages</a></li>";
-					} else{
-						echo "<li><a href='messages.php'>Messages (" . $messagesNotif . ") </a></li>";
-					}
-				} 
-			?>
-			<li><a href="notifications.php">Notifications</a></li>
-			<?php if ($isLogin) {
-				if ($friendNotif == 0) {
-					echo "<li><a href='writer.php'>Writer</a></li>";
-				} else{
-					echo "<li><a href='writer.php'>Writer (" . $friendNotif . ") </a></li>";
-				}
-			} ?>
-			<li><a href="writerSearch.php">Search your partner</a></li>
-			<li><a href="logout.php">Logout</a></li>
-		</ul>
-	</nav>
+	
+	<!-- navigation section -->
+	<?php require_once 'templates/nav-header.php'; ?>
+	<!-- navigation section -->	
 
 	<h1><?php echo $single->firstname . " " . $single->lastname ?></h1>
 	<p><?php echo $single->content;?></p>

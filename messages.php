@@ -8,18 +8,16 @@ if (empty($_SESSION['user_id'])) {
 	$isLogin = true;
 }
 
+// jika kamu pertama kali login, kamu akan di direct untuk menyelesaikan landing page
+if ($_SESSION['firstTime'] == 1) {
+	header('Location:' . AndPath::getHost() . AndPath::getPath() . '/landing.php');
+}
+
 $owner = $_SESSION['user_id'];
 
 // ---------------- handle database ------------------
 
 $con = new AndDatabase();
-
-$messagesNotif = $con->queryObj("
-	SELECT COUNT(*)
-	AS counter
-	FROM `openpen`.`messages`
-	WHERE `messages`.`reciever_id` = '$owner' AND `messages`.`is_read` = '0'
-	");
 
 $messagesFeed = $con->queryObj("
 	SELECT *
@@ -28,9 +26,9 @@ $messagesFeed = $con->queryObj("
 	");
 
 $messagesList = $con->queryObj("
-	SELECT DISTINCTROW sender_id, pen_name, firstname, lastname, date_created
-	FROM openpen.messages_list where reciever_id='$owner'
-	ORDER BY date_created DESC
+	SELECT DISTINCTROW sender_id, pen_name, firstname, lastname, is_read
+	FROM `openpen`.`messages_list` WHERE `reciever_id`='$owner'
+	ORDER BY `date_created` DESC
 	");
 
 $friendList = $con->queryObj("
@@ -39,16 +37,15 @@ $friendList = $con->queryObj("
 	WHERE `friend_list`.`friend` = '$owner' and `friend_list`.`confirm` = '1'
 	");
 
+require_once 'templates/counter.php';
+
 $con->closeConnection();
 
 // ---------------- handle database ------------------
 
-$messagesNotif = $messagesNotif[0]->counter;
-$messagesNotif = intval($messagesNotif);
-
 // $unique = array_unique($messagesList);
 
-// AndDevDebug::printNice($a);
+// AndDevDebug::printNice($messagesList);
 
 ?>
 
@@ -60,39 +57,22 @@ $messagesNotif = intval($messagesNotif);
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
-		<nav>
-			<ul>
-			<li><a href="home.php">Home</a></li>
-			<li><a href="profile.php?regist_id=<?php echo $owner; ?>">Profile</a></li>
-			<?php 
-				if ($isLogin) {
-					if ($messagesNotif == 0) {
-						echo "<li><a href='messages.php'>Messages</a></li>";
-					} else{
-						echo "<li><a href='messages.php'>Messages (" . $messagesNotif . ") </a></li>";
-					}
-				} 
-			?>
-			<li><a href="notifications.php">Notifications</a></li>
-			<?php 
-				if ($isLogin) {
-					if ($friendNotif == 0) {
-						echo "<li><a href='writer.php'>Writer</a></li>";
-					} else{
-						echo "<li><a href='writer.php'>Writer (" . $friendNotif . ") </a></li>";
-					}
-				} 
-			?>
-			<li><a href="writerSearch.php">Search your partner</a></li>
-			<li><a href="logout.php">Logout</a></li>
-		</ul>
-		</nav>		
+		
+		<!-- navigation section -->
+		<?php require_once 'templates/nav-header.php'; ?>
+		<!-- navigation section -->		
 
 		<h1>You have <?php echo $messagesNotif; ?> unread Message(s)</h1>
-		<?php  
+		<?php 
 			foreach ($messagesList as $value) {
-				echo "<h2>" . $value->firstname . " " . $value->lastname . " (@" . $value->pen_name . ")</h2>";
-				echo "<a href='conversation.php?ref=" . $value->sender_id . "'>See conversation</a>";
+				if (intval($value->is_read == 0)){
+					include 'templates/counterUnreadMessage.php';
+					echo "<h2>(" . $counterUnread . " unread) " . $value->firstname . " " . $value->lastname . " (@" . $value->pen_name . ")</h2>";
+					echo "<a href='conversation.php?ref=" . $value->sender_id . "'>See conversation</a>";
+				} elseif (intval($value->is_read == 1)) {
+					echo "<h2>" . $value->firstname . " " . $value->lastname . " (@" . $value->pen_name . ")</h2>";
+					echo "<a href='conversation.php?ref=" . $value->sender_id . "'>See conversation</a>";
+				}
 			}
 		?>
 

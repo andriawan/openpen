@@ -8,6 +8,11 @@ if (empty($_SESSION['user_id'])) {
 	$isLogin = true;
 }
 
+// jika kamu pertama kali login, kamu akan di direct untuk menyelesaikan landing page
+if ($_SESSION['firstTime'] == 1) {
+	header('Location:' . AndPath::getHost() . AndPath::getPath() . '/landing.php');
+}
+
 $owner = $_SESSION['user_id'];
 // using get method to retrieve data from table
 $input = $_GET;
@@ -19,8 +24,8 @@ $con = new AndDatabase();
 //query from table user
 $result = $con->queryObj("
 	SELECT * 
-	FROM `openpen`.`user`, `openpen`.`act_writing`  
-	WHERE `user`.`regist_id` = '$regist_id' AND `act_writing`.`user_regist_id` = '$regist_id' 
+	FROM `openpen`.`all_user_post`  
+	WHERE `all_user_post`.`regist_id` = '$regist_id'
 	ORDER BY date_created DESC
 	");
 //query from table act_writing
@@ -37,12 +42,6 @@ $friend =  $con->queryObj("
 	WHERE user_regist_id = '$owner' AND friend ='$regist_id'
 	");
 
-$friendNotif =  $con->queryObj("
-	SELECT COUNT(friend) 
-	AS friend 
-	FROM `openpen`.`pen_friend` 
-	WHERE friend = '$owner' AND confirm = '0'");
-
 $isYourFriend = $con->queryObj("
 	SELECT user_regist_id
 	AS user
@@ -50,12 +49,7 @@ $isYourFriend = $con->queryObj("
 	WHERE user_regist_id = '$regist_id' AND friend ='$owner'
 	");
 
-$messagesNotif = $con->queryObj("
-	SELECT COUNT(*)
-	AS counter
-	FROM `openpen`.`messages`
-	WHERE `messages`.`reciever_id` = '$owner' AND `messages`.`is_read` = '0'
-	");
+require 'templates/counter.php';
 
 $con->closeConnection();
 // ---------------- handle database ------------------
@@ -64,19 +58,15 @@ $writer = $writer[0];
 //for form
 $val = $result[0]->regist_id;
 //for validate if friend request has been sent or not
-$friend = $friend[0];
-$friendNotif = $friendNotif[0];
 $isYourFriend = $isYourFriend[0];
 //retrieve numbers of messages notif
-$messagesNotif = $messagesNotif[0]->counter;
-$messagesNotif = intval($messagesNotif);
 
-$isSent = intval($friend->counter);
+$isSent = $friend[0]->counter;
+$isSent = intval($friend[0]->counter);
 $writer = intval($writer->counter);
-$friendNotif = intval($friendNotif->friend);
 $isYourFriend = intval($isYourFriend->user);
 
-// AndDevDebug::printNice($result);
+//AndDevDebug::printNice($isSent);
 
 ?>
 
@@ -89,48 +79,35 @@ $isYourFriend = intval($isYourFriend->user);
 	<link rel="stylesheet" href="">
 </head>
 <body>
-	<nav>
-		<ul>
-			<li><a href="home.php">Home</a></li>
-			<li><a href="profile.php?regist_id=<?php echo $owner; ?>">Profile</a></li>
-			<?php 
-				if ($isLogin) {
-					if ($messagesNotif == 0) {
-						echo "<li><a href='messages.php'>Messages</a></li>";
-					} else{
-						echo "<li><a href='messages.php'>Messages (" . $messagesNotif . ") </a></li>";
-					}
-				} 
-			?>
-			<li><a href="notifications.php">Notifications</a></li>
-			<?php if ($isLogin) {
-				if ($friendNotif == 0) {
-					echo "<li><a href='writer.php'>Writer</a></li>";
-				} else{
-					echo "<li><a href='writer.php'>Writer (" . $friendNotif . ") </a></li>";
-				}
-			} ?>
-			<li><a href="writerSearch.php">Search your partner</a></li>
-			<li><a href="logout.php">Logout</a></li>
-		</ul>
-	</nav>
-	 <?php 
+	<?php 
 
-		 if ($_SESSION['user_id'] == $regist_id && $isLogin) {
+		if (isset($_SESSION['must_login'])) {
+			echo '<h3>' . $_SESSION['must_login'] . '</h3>';
+			unset($_SESSION['must_login']);
+		}
 
-		 	if ($writer >= 1) {
-		 		echo "<h1>Write your story</h1>";	
-		 	} else {
-		 		echo "<h1>Write your first story</h1>";
-		 	}
+	?>
 
-		 	echo "<form accept-charset='utf-8' action='formWritingProcessor.php' method='post'>
+
+	<!-- navigation section -->
+	<?php require_once 'templates/nav-header.php'; ?>
+	<!-- navigation section -->
+	
+	<?php if ($_SESSION['user_id'] == $regist_id && $isLogin): ?>
+
+		<?php if ($writer >= 1): ?>
+			<h1>Write Your Story</h1>
+		<?php else: ?>
+			<h1>Write your first story</h1>
+		<?php endif ?>
+
+		<form accept-charset='utf-8' action='formWritingProcessor.php' method='post'>
 			<!-- hidden section -->
-			<input type='hidden' name='userid' value='". $regist_id . "'>
-			<label for='toc'>Table of Content</label>";
+			<input type='hidden' name='userid' value='<?php echo $regist_id; ?>'>
+			<label for='toc'>Table of Content</label>
 
-			 if ($writer >= 1) {
-				echo "<select name='toc' id='toc'>
+			<?php if ($writer >= 1): ?>
+				<select name='toc' id='toc'>
 					<option value='Introduction'>Introduction</option>
 					<option value='Prologue'>Prologue</option>
 					<option value='chapter1'>Chapter 1</option>
@@ -139,78 +116,88 @@ $isYourFriend = intval($isYourFriend->user);
 					<option value='chapter4'>Chapter 4</option>
 					<option value='chapter5'>Chapter 5</option>
 					<option value='chapter6'>Chapter 6</option>
-					</select>";
-	 		} else {
-		 		echo "<select name='toc' id='toc'>
-					<option value='Introduction'>Introduction</option>
-					</select>";	
-	 		}
-
-	 		echo "<br>
-				<br>
-				<label for='title'>Title</label>
-				<br>
-				<input type='text' name='title' placeholder='your title's story' required>
-				<br>
-				<br>
-				<label for='content'>Content</label>
-				<textarea name='content' required></textarea>
-				<br>
-				<label for='marathon'>Marathon (do you want others writers contribute to your story?)</label>
-				<select name='status' id='status' required>
-					<option value='1'>yes</option>
-					<option value='0'>no</option>
 				</select>
-				<br>
-				<input type='submit' value='Write it Out!'>
-			</form>";
+			<?php else: ?>
+				<select name='toc' id='toc'>
+					<option value='Introduction'>Introduction</option>
+				</select>
+			<?php endif ?>
+		<br>
+		<br>
+		<label for='title'>Title</label>
+		<br>
+		<input type='text' name='title' placeholder='your title's story' required>
+		<br>
+		<br>
+		<label for='content'>Content</label>
+		<textarea name='content' required></textarea>
+		<br>
+		<label for='marathon'>Marathon (do you want others writers contribute to your story?)</label>
+		<select name='status' id='status' required>
+			<option value='1'>yes</option>
+			<option value='0'>no</option>
+		</select>
+		<br>
+		<input type='submit' value='Write it Out!'>
 
-	 	}else{
+		</form>
 
-	 		if(isLogin == true && !empty($regist_id) ){
+	<?php else: ?>
 
-	 			if(!$isYourFriend == $regist_id){
+		<?php if (isLogin == true && !empty($regist_id)): ?>
 
-	 				if ($isSent == 0) {
-		 			echo "<h2><a href=partnerRequestProcessor.php?reference=" . $regist_id . ">add as a partner</a></h2>";
-			 		}else{
-			 			echo "<h2>Request has been sent</h2>";
-			 		}
+			<?php if (!$isYourFriend == $regist_id): ?>
 
-	 			} else{
-	 				echo NULL;
-	 			}
+				<?php if (intval($isSent) == 0): ?>
+					<h2><a href=partnerRequestProcessor.php?reference=<?php echo $regist_id ;?>>add as a partner</a></h2>
+				<?php else: ?>
+					<h2>Request has been sent</h2>
+				<?php endif ?>
 
-	 			
+			<?php else: ?>
+				<?php echo NULL ?>
+			<?php endif ?>
+				
+		<?php endif ?>
+	
+	<?php endif ?>
 
-	 		} else{
-	 			echo NULL;
-	 		}
+	<?php foreach ($result as $value): ?>
 
-	 		
-	 	}
+		<h1><?php echo $value->pen_name ?></h1>
+		<h2><?php echo $value->title ?></h2>
+		<p><?php echo $value->content ?></p>
 
-
-
-	 ?>
-	<?php
-
-		foreach($result as $value){
-			// var_dump($value['title']);
-			echo "<h1>". $value->pen_name. "</h1>";
-			echo "<h2>". $value->title. "</h2>";
-			echo "<p>". $value->content. "</p>";
+		<?php 
 			$dateRaw = AndTimeUtils::setDateToTimestamp($value->date_created);
 			$agoStyle = AndTimeUtils::getTimeAgoStyle($dateRaw);
-			echo "<p>". $agoStyle . "</p>";
-			if ($owner == $regist_id ) {
-				echo "<a href='single.php?ref=" . $value->writing_id . "'>Edit</a>";
-			} elseif($value->marathon_status == 1){
-				echo "<a href='proposal.php?ref=" . $value->writing_id . "'>Propose Marathon Writing</a>";
-			}
-		}
+		?>
 
-	?>
-	
+		<p><?php echo $agoStyle ?></p>
+
+		<?php if ($owner == $regist_id): ?>
+			<a href="single.php?ref=<?php echo $value->writing_id ?>">Edit</a>	
+		<?php else: ?>
+			<a href="proposal.php?ref=<?php echo $value->writing_id?>" title=""></a>		
+		<?php endif ?>
+
+		<?php include 'templates/counterLike.php'; ?>
+
+		<?php if (intval($isLike) > 0): ?>
+			<a href="likeProcessor.php?uref=<?php echo $value->writing_id ?>&utrigger=<?php echo $regist_id ?>">Unlike</a>
+		<?php else: ?>
+			<a href="likeProcessor.php?ref=<?php echo $value->writing_id ?>&trigger=<?php echo $regist_id ?>" title="Like">Like</a>
+		<?php endif ?>
+
+		
+
+		<?php if ($likeCounter == 0): ?>
+			<?php echo null ?>
+		<?php else: ?>
+			<span><b><?php echo $likeCounter ?> like</b></span>
+		<?php endif ?>
+
+	<?php endforeach ?>
+
 </body>
 </html>

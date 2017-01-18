@@ -14,13 +14,14 @@ $recieverId = $form['friendlist'];
 $messages = $form['subject'];
 $time = $timeNow = date("Y-m-d H:i:s", time());
 $isRead = 0;
+$unreadCounter = 1;
 
 // ---------------- handle database ------------------
 $con = new AndDatabase();
 
 $messagesFeed = $con->queryObj("
-	INSERT INTO `openpen`.`messages` (`sender_id`, `reciever_id`, `message_subject`, `date_created`, `is_read`)
-	VALUES ('$owner', '$recieverId', '$messages', '$time', '$isRead')
+	INSERT INTO `openpen`.`messages` (`sender_id`, `reciever_id`, `message_subject`, `date_created`, `is_read`, `counter_unread`)
+	VALUES ('$owner', '$recieverId', '$messages', '$time', '$isRead', '$unreadCounter')
 	");
 
 $con->closeConnection();
